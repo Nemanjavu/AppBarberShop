@@ -21,7 +21,7 @@ namespace AppBarberShop.Models
         public int BarberId { get; set; }
         
         public  Barber Barber { get; set; }
-
+        
 
         [Required(ErrorMessage = "Indicate meeting date.")]
         [DataType(DataType.Date)]
@@ -41,12 +41,12 @@ namespace AppBarberShop.Models
         //[ForeignKey("CustomerId")]
         [Display(Name = "Customer")]
         public string UserId { get; set; }
-
+        
         //public virtual Customer Customer { get; set; }
+        
+        
 
-
-
-
+        
 
         public bool IsValidBooking(Booking newBooking)
         {
@@ -66,7 +66,7 @@ namespace AppBarberShop.Models
                 return true;
             }
         }
-
+            
     }
 
 
