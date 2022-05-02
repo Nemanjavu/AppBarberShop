@@ -232,12 +232,12 @@ namespace AppBarberShop.Controllers
             if (saveChangesError.GetValueOrDefault())
             {
                 ViewBag.ErrorMessage = "Delete failed. Please try again. If problem persists, contact your system administrator.";
-            }
+    }
             Booking booking = _context.Bookings.Find(id);
             if (booking == null)
             {
                 return NotFound();
-            }
+}
             return View(booking);
         }
 
