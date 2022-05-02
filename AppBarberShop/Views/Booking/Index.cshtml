@@ -1,7 +1,60 @@
-﻿@model IEnumerable<Booking>
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using AppBarberShop.Models
+@model IEnumerable<Booking>
 @{
+    ViewBag.Title = "Index";
+    var trClass = User.IsInRole("Admin") ? "" : "hidden";
 }
-<h1>Hello</h1>
+
+<h2>Your Future Bookings</h2>
+
+<p>
+    @Html.ActionLink("Create New Booking", "Create")
+</p>
+
+@if (Model.Count() > 0)
+{
+<table class="table table-striped">
+    <tr>    
+       
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            Timeslot
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Barber.BarberName)
+        </th>
+        <th class="@trClass">
+            @Html.DisplayNameFor(model => model.UserId)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (Booking item in Model) {
+    <tr>      
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @item.Start_DateTime.ToShortTimeString()&ensp;–&ensp;@item.End_DateTime.ToShortTimeString()
+        </td>
+        <td>
+            @Html.ActionLink(@item.Barber.BarberName, "Details", "MeetingRooms", new { keyword = item.Barber.BarberName  }, null)
+        </td>
+        <td class="@trClass">
+            @Html.DisplayFor(modelItem => item.UserId)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.BookingId }) |
+            @Html.ActionLink("Cancel", "Delete", new { id=item.BookingId })
+        </td>
+    </tr>
+}
+</table>
+}
+else
+{
+    <h3>You do not have any booking for future meetings.</h3>
+}

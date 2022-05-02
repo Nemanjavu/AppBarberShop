@@ -23,18 +23,18 @@ namespace AppBarberShop.Controllers
         {
             //List<Booking> bookings = _context.Bookings.ToList();
             //return View();
-            IEnumerable<Booking> bookingsToShow;
+            IEnumerable<Booking> bookings;
             if (User.IsInRole("Admin"))
             {
-                bookingsToShow = _context.Bookings.Where(b => b.Date >= DateTime.Today).Include(b => b.Barber).OrderBy(b => b.Date).ThenBy(b => b.Start_DateTime).ToList();
+                bookings = _context.Bookings.Where(b => b.Date >= DateTime.Today).Include(b => b.Barber).OrderBy(b => b.Date).ThenBy(b => b.Start_DateTime).ToList();
             }
             else
             {
                 string user_id = User.Identity.Name;
-                bookingsToShow = _context.Bookings.Where(b => b.UserId == user_id).Where(b => b.Date >= DateTime.Today).Include(b => b.Barber).OrderBy(b => b.Date).ThenBy(b => b.Start_DateTime).ToList();
+                bookings = _context.Bookings.Where(b => b.UserId == user_id).Where(b => b.Date >= DateTime.Today).Include(b => b.Barber).OrderBy(b => b.Date).ThenBy(b => b.Start_DateTime).ToList();
             }
 
-            return View(bookingsToShow);
+            return View(bookings);
         }
 
         // GET: Booking/Create
@@ -156,7 +156,7 @@ namespace AppBarberShop.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return View("NotAuthorizedError", new HandleErrorInfo(ex, "Booking", "Edit"));
+                return View("NotAuthorizedError", ex);//, new HandleErrorInfo(ex, "Booking", "Edit"));
             }
         }
 
@@ -260,7 +260,7 @@ namespace AppBarberShop.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return View("NotAuthorizedError", new HandleErrorInfo(ex, "Booking", "Index"));
+                return View("NotAuthorizedError", ex);//, new HandleErrorInfo(ex, "Booking", "Index"));
             }
         }
 
@@ -276,7 +276,8 @@ namespace AppBarberShop.Controllers
         //Find Available Rooms when date and time are picked
         private List<Barber> FindAvailableBarbers(DateTime date, DateTime startTime, DateTime endTime)
         {
-            List<Barber> availableBarber = _context.Barber.OrderBy(r => r.Size).ToList();
+            List<Barber> availableBarber = _context.Barbers.OrderBy(r => r.BarberName).ToList();
+            //availableBarber = await _context.Barber.//OrderBy(r => r.BarberName).ToListAsync();
 
             //find meetings on same day
             IEnumerable<Booking> filteredBookings = _context.Bookings.Where(b => b.Date.Year == date.Year && b.Date.Month == date.Month && b.Date.Day == date.Day).ToList();
@@ -294,17 +295,17 @@ namespace AppBarberShop.Controllers
 
         //method that can be called from client console app
         [AllowAnonymous]
-        public JsonResult GetAvailableRooms(string _date, string _startTime, string _endTime)
+        public JsonResult GetAvailableBarber(string _date, string _startTime, string _endTime)
         {
             DateTime date = DateTime.ParseExact(_date, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
             DateTime startTime = DateTime.ParseExact(_startTime, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
             DateTime endTime = DateTime.ParseExact(_endTime, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
 
             //to avoid error 'circular reference was detected while serializing an object of type System.Data.Entity.DynamicProxies.MeetingRoom'
-            _context.Configuration.ProxyCreationEnabled = false;
-            List<Barber> freeRooms = FindAvailableBarbers(date, startTime, endTime);
+            //_context.Configuration.ProxyCreationEnabled = false;
+            List<Barber> freeBarber = FindAvailableBarbers(date, startTime, endTime);
 
-            return Json(freeRooms, JsonRequestBehavior.AllowGet);
+            return Json(freeBarber);//, JsonRequestBehavior.AllowGet);
         }
 
         //populate start time dropdown list

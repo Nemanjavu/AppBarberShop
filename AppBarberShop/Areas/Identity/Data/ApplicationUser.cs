@@ -11,7 +11,7 @@ namespace AppBarberShop.Areas.Identity.Data;
 public class ApplicationUser : IdentityUser
 {
     [Key]
-    public int Id { get; set; }
+    //public int Id { get; set; }
     public string FirstName { get; set; }
     
     public string LastName { get; set; }

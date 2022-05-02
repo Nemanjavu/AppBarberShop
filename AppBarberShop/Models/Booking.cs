@@ -20,7 +20,7 @@ namespace AppBarberShop.Models
         [Display(Name = "Barber")]
         public int BarberId { get; set; }
         
-        public  Barber Barber { get; set; }
+        public virtual Barber Barber { get; set; }
         
 
         [Required(ErrorMessage = "Indicate meeting date.")]

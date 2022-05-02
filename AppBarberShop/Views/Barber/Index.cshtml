@@ -1,0 +1,57 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<AppBarberShop.Models.Barber>
+
+@{
+    ViewBag.Title = "Index";
+    var trClass = User.IsInRole("Admin") ? "" : "hidden";
+}
+
+@Html.Raw(TempData["msg"])
+
+
+<h2>Meeting Rooms</h2>
+
+<p margin-top: 10px; class="@trClass">
+    @Html.ActionLink("Add a New Barber", "Create")
+</p>
+
+
+<hr />
+<div class="container">
+    <div class="pull-right">
+        <form class="form-inline" role="form">
+            <div class="form-group">
+                <label class="sr-only" for="search-text">Meeting Room Name</label>
+                @Html.TextBox("SearchString", "", new { @class = "form-control", @placeholder = "Search Barber Name" })
+            </div>
+            <button type="submit" class="btn btn-success" id="search-btn">Search</button>
+        </form>
+    </div>
+</div>
+<br/>
+
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm })
+        </th>
+        
+        <th class="@trClass"></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.BarberName)
+        </td>
+       
+        <td class="@trClass">
+            @Html.ActionLink("Edit", "Edit", new { id=item.BarberId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.BarberId })
+        </td>
+    </tr>
+}
