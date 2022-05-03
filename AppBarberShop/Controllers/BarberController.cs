@@ -3,6 +3,7 @@ using AppBarberShop.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace AppBarberShop.Controllers
@@ -64,6 +65,7 @@ namespace AppBarberShop.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
+           
             return View();
         }
 

@@ -8,6 +8,7 @@ namespace AppBarberShop.ViewModels
     {
         private DateTime start_DateTime;
         private DateTime end_DateTime;
+
         [HiddenInput]
         public int? BookingId { get; set; }
 

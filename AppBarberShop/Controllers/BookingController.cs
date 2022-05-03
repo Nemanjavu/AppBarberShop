@@ -49,12 +49,12 @@ namespace AppBarberShop.Controllers
         // POST: Booking/CreateStep2
         //Used to Pick Room
         [HttpPost]
-        public ActionResult CreateStep2(BookingCreateViewModel vm)
+        public ActionResult Create2(BookingCreateViewModel vm)
         {
-            //if (vm == null)
-            //{
-            //    return new(BadRequest);
-            //}
+            if (vm == null)
+            {
+                return BadRequest();
+            }
             if (vm.InvalidStartAndEnd())
             {
                 ModelState.AddModelError("", "Please check start and end times. A meeting cannot end before it starts.");
@@ -76,8 +76,8 @@ namespace AppBarberShop.Controllers
                         End_DateTime = vm.End_DateTime,
                     };
                     ViewBag.Username = User.Identity.Name;
-                    ViewBag.AvailableRooms = availableBarbers;
-                    ViewBag.RoomId = new SelectList(availableBarbers, "BarberId", "Name");
+                    ViewBag.AvailableBarbers = availableBarbers;
+                    ViewBag.BarberId = new SelectList(availableBarbers, "BarberId", "BarberName");
                     return View(newBooking);
                 }
             }
@@ -89,7 +89,7 @@ namespace AppBarberShop.Controllers
         // POST: Booking/CreatePost
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreatePost([Bind("BarberId, Date, Start_DateTime, End_DateTime, UserId")] Booking booking)
+        public ActionResult CreatePost([Bind("BarberId, Service, Date, Start_DateTime, End_DateTime, UserId")] Booking booking)
         {
             try
             {
@@ -145,11 +145,12 @@ namespace AppBarberShop.Controllers
                 {
                     BookingId = booking.BookingId,
                     Date = booking.Date,
+                    Service = booking.Service,
                     Start_DateTime = booking.Start_DateTime,
                     End_DateTime = booking.End_DateTime
                 };
 
-                ViewBag.RoomId = new SelectList(_context.Barbers, "BarberId", "BarberName", booking.BarberId);
+                ViewBag.BarberId = new SelectList(_context.Barbers, "BarberId", "BarberName", booking.BarberId);
                 PopulateStartTimeDropDownList(booking.Start_DateTime);
                 PopulateEndTimeDropDownList(booking.End_DateTime);
                 return View(vm);
@@ -187,7 +188,7 @@ namespace AppBarberShop.Controllers
                     checkSet.Remove(bookingToUpdate);
 
                     //assign vm values to booking
-                   
+                    bookingToUpdate.Service = vm.Service;
                     bookingToUpdate.Date = vm.Date;
                     bookingToUpdate.Start_DateTime = vm.Start_DateTime;
                     bookingToUpdate.End_DateTime = vm.End_DateTime;
@@ -199,7 +200,7 @@ namespace AppBarberShop.Controllers
                         if (!b.IsValidBooking(bookingToUpdate))
                         {
                             ModelState.AddModelError("", "The selected room is not available at the selected date and times. Please try to make another booking.");
-                            ViewBag.RoomId = new SelectList(_context.Barbers, "RoomId", "Name", bookingToUpdate.BarberId);
+                            ViewBag.BarberId = new SelectList(_context.Barbers, "BarberId", "BarberName", bookingToUpdate.BarberId);
                             PopulateStartTimeDropDownList(bookingToUpdate.Start_DateTime);
                             PopulateEndTimeDropDownList(bookingToUpdate.End_DateTime);
                             return View("Edit", vm);
@@ -216,7 +217,7 @@ namespace AppBarberShop.Controllers
                     }
                 }
             }
-            ViewBag.RoomId = new SelectList(_context.Barbers, "RoomId", "Name", bookingToUpdate.BarberId);
+            ViewBag.BarberId = new SelectList(_context.Barbers, "BarberId", "BarberName", bookingToUpdate.BarberId);
             PopulateStartTimeDropDownList(vm.Start_DateTime);
             PopulateEndTimeDropDownList(vm.End_DateTime);
             return View("Edit", vm);

@@ -3,6 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using AppBarberShop.Areas.Identity.Data;
+using Microsoft.SqlServer.Management.Smo;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Default");;
@@ -11,6 +12,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));;
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    //.AddRoles<ApplicationRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();;
 
 
@@ -19,6 +21,11 @@ builder.Services.AddControllersWithViews();
 
 
 var app = builder.Build();
+if (args.Length == 1 && args[0].ToLower() == "seeddata")
+{
+    Seed.SeedData(app);
+}
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

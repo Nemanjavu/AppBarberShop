@@ -16,6 +16,6 @@ namespace AppBarberShop.Models
         public string  BarberName{ get; set; }
 
 
-        public ICollection<Booking> Bookings { get; set; }
+        public virtual ICollection<Booking> Bookings { get; set; }
     }
 }

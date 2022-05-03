@@ -15,11 +15,11 @@ namespace AppBarberShop.Models
 
         [Display(Name = "Choose service")]
         public Service Service { get; set; }
-
-        [ForeignKey("BarberId")]
+        [Required]
         [Display(Name = "Barber")]
         public int BarberId { get; set; }
-        
+        [ForeignKey("BarberId")]
+
         public virtual Barber Barber { get; set; }
         
 
@@ -38,7 +38,7 @@ namespace AppBarberShop.Models
         [Display(Name = "End Time")]
         public DateTime End_DateTime { get; set; }
 
-        //[ForeignKey("CustomerId")]
+        [Required]
         [Display(Name = "Customer")]
         public string UserId { get; set; }
         
