@@ -15,7 +15,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     }
     public DbSet<Booking> Bookings { get; set; }
     public DbSet<Barber> Barbers { get; set; }
-    public object Barber { get; internal set; }
+    //public object Barber { get; internal set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
