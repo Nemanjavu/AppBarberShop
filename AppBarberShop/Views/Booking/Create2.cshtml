@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Components.Web
+﻿@using AppBarberShop.Data.Enum
+@using Microsoft.AspNetCore.Components.Web
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -23,7 +24,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Service, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Service, new { htmlAttributes = new { @class = "form-control", @autofocus = "autofocus" } })
+                @Html.DropDownListFor(m => m.Service, new SelectList(Enum.GetValues(typeof(Service))), htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Service, "", new { @class = "text-danger" })
             </div>
         </div>

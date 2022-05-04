@@ -1,4 +1,4 @@
-﻿
+﻿//@Html.EditorFor(model => model.Service, new { htmlAttributes = new { @class = "form-control", @autofocus = "autofocus" } })
 
 using AppBarberShop.Data.Enum;
 using Microsoft.AspNetCore.Mvc;
