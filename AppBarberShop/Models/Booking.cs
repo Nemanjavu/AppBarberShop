@@ -20,35 +20,52 @@ namespace AppBarberShop.Models
         [Display(Name = "Barber")]
         public int BarberId { get; set; }
         
-        public  Barber Barber { get; set; }
+        public virtual Barber Barber { get; set; }
         
 
-        [Display(Name = "Date")]
-        [Required(ErrorMessage = "please choose date")]
-        [BindProperty, DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm}", ApplyFormatInEditMode = true)]
+        [Required(ErrorMessage = "Indicate meeting date.")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
 
-        [ForeignKey("CustomerId")]
+        [Required(ErrorMessage = "Indicate when meeting starts.")]
+        [DataType(DataType.Time)]
+        [Display(Name = "Start Time")]
+        public DateTime Start_DateTime { get; set; }
+
+        [Required(ErrorMessage = "Indicate when meeting ends.")]
+        [DataType(DataType.Time)]
+        [Display(Name = "End Time")]
+        public DateTime End_DateTime { get; set; }
+
+        //[ForeignKey("CustomerId")]
         [Display(Name = "Customer")]
-        public int CustomerId { get; set; }
+        public string UserId { get; set; }
         
-        public virtual Customer Customer { get; set; }
+        //public virtual Customer Customer { get; set; }
         
-        
-
         
 
-        //public bool IsValidBooking(Booking newBooking)
-        //{
-        //    if (newBooking.BookingId == BarberId && newBooking.Date == Date)
-        //    {
-        //        return true;
-        //        }
-        //    else
-        //     {
-        //         return false;
-        //        }
-        //}
+        
+
+        public bool IsValidBooking(Booking newBooking)
+        {
+            if (newBooking.BookingId == BarberId && newBooking.Date == Date)
+            {
+                if ((newBooking.Start_DateTime > End_DateTime) || (newBooking.End_DateTime < Start_DateTime))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
             
     }
 
