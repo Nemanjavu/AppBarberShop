@@ -15,11 +15,11 @@ namespace AppBarberShop.Models
 
         [Display(Name = "Choose service")]
         public Service Service { get; set; }
-        [Required]
+
+        [ForeignKey("BarberId")]
         [Display(Name = "Barber")]
         public int BarberId { get; set; }
-        [ForeignKey("BarberId")]
-
+      
         public virtual Barber Barber { get; set; }
         
 
@@ -38,15 +38,15 @@ namespace AppBarberShop.Models
         [Display(Name = "End Time")]
         public DateTime End_DateTime { get; set; }
 
-        [Required]
+        //[Required]
         [Display(Name = "Customer")]
         public string UserId { get; set; }
-        
-        //public virtual Customer Customer { get; set; }
-        
-        
 
-        
+        //public virtual Customer Customer { get; set; }
+
+
+
+
 
         public bool IsValidBooking(Booking newBooking)
         {
@@ -66,7 +66,7 @@ namespace AppBarberShop.Models
                 return true;
             }
         }
-            
+
     }
 
 

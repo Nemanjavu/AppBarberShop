@@ -180,7 +180,7 @@ namespace AppBarberShop.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Start_DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     End_DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

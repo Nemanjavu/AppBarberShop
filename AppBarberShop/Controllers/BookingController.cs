@@ -121,6 +121,7 @@ namespace AppBarberShop.Controllers
             }
         }
 
+
         // GET: Booking/Edit/5
         public ActionResult Edit(int? id)
         {
