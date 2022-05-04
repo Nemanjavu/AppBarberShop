@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppBarberShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220502181032_Final")]
-    partial class Final
+    [Migration("20220503204010_Initital1Create")]
+    partial class Initital1Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

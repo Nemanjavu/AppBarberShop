@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AppBarberShop.Migrations
 {
-    public partial class Final : Migration
+    public partial class Initital1Create : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

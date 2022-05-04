@@ -1,4 +1,5 @@
-﻿@*
+﻿@using Microsoft.AspNetCore.Components.Web
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
@@ -62,7 +63,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.BarberId, "BarberId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("BarberId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.BarberId, new SelectList(ViewBag.AvailableBarbers, "BarberId", "BarberName"), htmlAttributes: new { @class = "form-control" })
                 <small id="roomHelpBlock" class="form-text text-muted">
                     See below for meeting room information.
                 </small>
@@ -93,7 +94,7 @@
                 <th></th>
             </tr>
 
-            @foreach (AppBarberShop.Models.Barber item in ViewBag.AvailableRooms)
+            @foreach (AppBarberShop.Models.Barber item in ViewBag.AvailableBarbers)
             {
                 <tr>
                     <td>
