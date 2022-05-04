@@ -217,7 +217,7 @@ namespace AppBarberShop.Controllers
                     }
                 }
             }
-            ViewBag.BarberId = new SelectList(_context.Barbers, "BarberId", "BarberName", bookingToUpdate.BarberId);
+            ViewBag.RoomId = new SelectList(_context.Barbers, "RoomId", "Name", bookingToUpdate.BarberId);
             PopulateStartTimeDropDownList(vm.Start_DateTime);
             PopulateEndTimeDropDownList(vm.End_DateTime);
             return View("Edit", vm);
