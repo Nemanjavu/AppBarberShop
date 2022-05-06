@@ -14,11 +14,18 @@ namespace AppBarberShop.Controllers
 {
     public class BookingController : Controller
     {
+        private IHttpContextAccessor _httpContextAccessor;
+
         private readonly ApplicationDbContext _context;
-        public BookingController(ApplicationDbContext context)
+        public BookingController(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor=httpContextAccessor;
         }
+        //public async Task<ApplicationUser> GetUserById(string id)
+        //{
+        //    return await _context.Users.FindAsync(id);
+        //}
         public ActionResult Index()
         {
             //List<Booking> bookings = _context.Bookings.ToList();
@@ -30,7 +37,12 @@ namespace AppBarberShop.Controllers
             }
             else
             {
-                string user_id = User.Identity.Name;
+                //ApplicationUser applicationUser = new ApplicationUser();
+                //var user_id = _context.Users.FindAsync(User);   
+                //var user_Id = new ApplicationUser() { Id = _context.Bookings.Add(UserId)};
+                // var user_id = _context.Users.Where(u => u.Id == id).SingleOrDefault();
+                var user_id = _httpContextAccessor.HttpContext?.User.GetUserId();
+
                 bookings = _context.Bookings.Where(b => b.UserId == user_id).Where(b => b.Date >= DateTime.Today).Include(b => b.Barber).OrderBy(b => b.Date).ThenBy(b => b.Start_DateTime).ToList();
             }
 
@@ -68,14 +80,18 @@ namespace AppBarberShop.Controllers
                     ModelState.AddModelError("", "Sorry, there is no available room at the specified date and time.");
                 }
                 else
+
                 {
+                    
                     Booking newBooking = new Booking
                     {
                         Date = vm.Date,
                         Start_DateTime = vm.Start_DateTime,
                         End_DateTime = vm.End_DateTime,
+                        
                     };
-                    ViewBag.Username = User.Identity.Name;
+
+                    ViewBag.Username = _httpContextAccessor.HttpContext?.User.GetUserId();
                     ViewBag.AvailableBarbers = availableBarbers;
                     ViewBag.BarberId = new SelectList(availableBarbers, "BarberId", "BarberName");
                     return View(newBooking);
@@ -91,8 +107,12 @@ namespace AppBarberShop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreatePost([Bind("BarberId, Service, Date, Start_DateTime, End_DateTime, UserId")] Booking booking)
         {
+            var user_id = _httpContextAccessor.HttpContext?.User.GetUserId();
+            booking.UserId = user_id;
+
             try
             {
+
                 if (ModelState.IsValid)
                 {
                     //make sure room is still free
@@ -137,7 +157,8 @@ namespace AppBarberShop.Controllers
             //check if the booking is from the user logged in unless he is an admin
             try
             {
-                if (!User.IsInRole("Admin") && booking.UserId != User.Identity.Name)
+                //if (!User.IsInRole("Admin") && booking.UserId != User.Identity.Name)
+                if (booking.UserId == User.Identity.Name)
                 {
                     throw new UnauthorizedAccessException("Oops, this booking doesn't seem to be yours, you cannot edit it.");
                 }
@@ -218,7 +239,7 @@ namespace AppBarberShop.Controllers
                     }
                 }
             }
-            ViewBag.RoomId = new SelectList(_context.Barbers, "RoomId", "Name", bookingToUpdate.BarberId);
+            ViewBag.BarberId = new SelectList(_context.Barbers, "BarberId", "BarberName", bookingToUpdate.BarberId);
             PopulateStartTimeDropDownList(vm.Start_DateTime);
             PopulateEndTimeDropDownList(vm.End_DateTime);
             return View("Edit", vm);
@@ -252,7 +273,8 @@ namespace AppBarberShop.Controllers
             //check if the booking is from the user logged in ***unless he is an admin***
             try
             {
-                if (!User.IsInRole("Admin") && booking.UserId != User.Identity.Name)
+                //if (!User.IsInRole("Admin") && booking.UserId != User.Identity.Name)
+                if (booking.UserId == User.Identity.Name)
                 {
                     throw new UnauthorizedAccessException("Oops, this booking doesn't seem to be yours, you cannot delete it.");
                 }

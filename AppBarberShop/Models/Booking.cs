@@ -1,9 +1,11 @@
 ﻿
 
+using AppBarberShop.Areas.Identity.Data;
 using AppBarberShop.Data.Enum;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Claims;
 
 namespace AppBarberShop.Models
 {
@@ -13,7 +15,7 @@ namespace AppBarberShop.Models
         [Key]
         public int BookingId { get; set; }
 
-        [Display(Name = "Choose service")]
+       // [Display(Name = "Choose service")]
         public Service Service { get; set; }
 
         [ForeignKey("BarberId")]
@@ -39,12 +41,15 @@ namespace AppBarberShop.Models
         public DateTime End_DateTime { get; set; }
 
         //[Required]
-        [Display(Name = "Customer")]
+        //[Display(Name = "Customer")]
+       // [ForeignKey("UserId")]
         public string UserId { get; set; }
+        //[ForeignKey("UserId")]
+        public virtual ApplicationUser User { get; set; }
 
         //public virtual Customer Customer { get; set; }
 
-
+        
 
 
 

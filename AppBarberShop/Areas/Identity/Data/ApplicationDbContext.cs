@@ -13,6 +13,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         
     }
+
     
     public DbSet<Booking> Bookings { get; set; }
     public DbSet<Barber> Barbers { get; set; }
@@ -25,6 +26,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
         builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
+        builder.Entity<Booking>()
+            .Property(u => u.Service)
+            .HasConversion<string>()
+            .HasMaxLength(50);
+        //builder.Entity<Booking>()
+        //      .HasOne(c => c.User)
+        //      .WithMany(x => x.Bookings)
+        //      .HasForeignKey(f => f.UserId)
+        //      .HasConstraintName("Id")
+        //      .OnDelete(DeleteBehavior.Cascade)
+        //      .IsRequired();
     }
 }
 
@@ -34,5 +46,6 @@ public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<Appli
     {
         builder.Property(u => u.FirstName).HasMaxLength(255);
         builder.Property(u => u.LastName).HasMaxLength(255);
+        //builder.Property(u => u.Id).HasMaxLength(255);
     }
 }
