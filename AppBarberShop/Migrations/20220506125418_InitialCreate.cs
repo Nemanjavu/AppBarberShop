@@ -175,16 +175,21 @@ namespace AppBarberShop.Migrations
                 {
                     BookingId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Service = table.Column<int>(type: "int", nullable: false),
+                    Service = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     BarberId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Start_DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     End_DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bookings", x => x.BookingId);
+                    table.ForeignKey(
+                        name: "FK_Bookings_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Bookings_Barbers_BarberId",
                         column: x => x.BarberId,
@@ -236,6 +241,11 @@ namespace AppBarberShop.Migrations
                 name: "IX_Bookings_BarberId",
                 table: "Bookings",
                 column: "BarberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_UserId",
+                table: "Bookings",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

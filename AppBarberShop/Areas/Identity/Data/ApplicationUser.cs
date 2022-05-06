@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppBarberShop.Areas.Identity.Data;
 
@@ -28,4 +29,5 @@ namespace AppBarberShop.Areas.Identity.Data;
         //    return userIdentity;
         //}
     }
+
    
