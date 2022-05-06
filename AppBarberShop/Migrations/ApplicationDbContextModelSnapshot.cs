@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppBarberShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class AppplicatioDbContextModelSnapshot : ModelSnapshot
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -130,18 +130,23 @@ namespace AppBarberShop.Migrations
                     b.Property<DateTime>("End_DateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Service")
-                        .HasColumnType("int");
+                    b.Property<string>("Service")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("Start_DateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("BookingId");
 
                     b.HasIndex("BarberId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
                 });
@@ -291,6 +296,15 @@ namespace AppBarberShop.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("AppBarberShop.Areas.Identity.Data.ApplicationUser", "AppUser")
+                        .WithMany("Bookings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("UserId");
+
+                    b.Navigation("AppUser");
+
                     b.Navigation("Barber");
                 });
 
@@ -343,6 +357,11 @@ namespace AppBarberShop.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AppBarberShop.Areas.Identity.Data.ApplicationUser", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 
             modelBuilder.Entity("AppBarberShop.Models.Barber", b =>

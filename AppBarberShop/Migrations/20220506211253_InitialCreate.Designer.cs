@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppBarberShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220501094543_InitialCreate")]
+    [Migration("20220506211253_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,10 +34,6 @@ namespace AppBarberShop.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -99,8 +95,6 @@ namespace AppBarberShop.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
                 });
 
             modelBuilder.Entity("AppBarberShop.Models.Barber", b =>
@@ -118,7 +112,7 @@ namespace AppBarberShop.Migrations
 
                     b.HasKey("BarberId");
 
-                    b.ToTable("Barber");
+                    b.ToTable("Barbers");
                 });
 
             modelBuilder.Entity("AppBarberShop.Models.Booking", b =>
@@ -132,23 +126,29 @@ namespace AppBarberShop.Migrations
                     b.Property<int>("BarberId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CustomerId1")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Service")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("End_DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Service")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("Start_DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("BookingId");
 
                     b.HasIndex("BarberId");
 
-                    b.HasIndex("CustomerId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
                 });
@@ -290,16 +290,6 @@ namespace AppBarberShop.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("AppBarberShop.Models.Customer", b =>
-                {
-                    b.HasBaseType("AppBarberShop.Areas.Identity.Data.ApplicationUser");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue("Customer");
-                });
-
             modelBuilder.Entity("AppBarberShop.Models.Booking", b =>
                 {
                     b.HasOne("AppBarberShop.Models.Barber", "Barber")
@@ -308,13 +298,16 @@ namespace AppBarberShop.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AppBarberShop.Models.Customer", "Customer")
+                    b.HasOne("AppBarberShop.Areas.Identity.Data.ApplicationUser", "AppUser")
                         .WithMany("Bookings")
-                        .HasForeignKey("CustomerId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("UserId");
+
+                    b.Navigation("AppUser");
 
                     b.Navigation("Barber");
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -368,12 +361,12 @@ namespace AppBarberShop.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AppBarberShop.Models.Barber", b =>
+            modelBuilder.Entity("AppBarberShop.Areas.Identity.Data.ApplicationUser", b =>
                 {
                     b.Navigation("Bookings");
                 });
 
-            modelBuilder.Entity("AppBarberShop.Models.Customer", b =>
+            modelBuilder.Entity("AppBarberShop.Models.Barber", b =>
                 {
                     b.Navigation("Bookings");
                 });

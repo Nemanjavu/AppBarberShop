@@ -30,8 +30,6 @@ namespace AppBarberShop.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CustomerId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -53,7 +51,7 @@ namespace AppBarberShop.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Barber",
+                name: "Barbers",
                 columns: table => new
                 {
                     BarberId = table.Column<int>(type: "int", nullable: false)
@@ -62,7 +60,7 @@ namespace AppBarberShop.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Barber", x => x.BarberId);
+                    table.PrimaryKey("PK_Barbers", x => x.BarberId);
                 });
 
             migrationBuilder.CreateTable(
@@ -177,25 +175,27 @@ namespace AppBarberShop.Migrations
                 {
                     BookingId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Service = table.Column<int>(type: "int", nullable: false),
+                    Service = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     BarberId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CustomerId = table.Column<int>(type: "int", nullable: false),
-                    CustomerId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Start_DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    End_DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bookings", x => x.BookingId);
                     table.ForeignKey(
-                        name: "FK_Bookings_AspNetUsers_CustomerId1",
-                        column: x => x.CustomerId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Bookings_Barber_BarberId",
+                        name: "FK_Bookings_Barbers_BarberId",
                         column: x => x.BarberId,
-                        principalTable: "Barber",
+                        principalTable: "Barbers",
                         principalColumn: "BarberId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -244,9 +244,9 @@ namespace AppBarberShop.Migrations
                 column: "BarberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bookings_CustomerId1",
+                name: "IX_Bookings_UserId",
                 table: "Bookings",
-                column: "CustomerId1");
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -273,10 +273,10 @@ namespace AppBarberShop.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Barbers");
 
             migrationBuilder.DropTable(
-                name: "Barber");
+                name: "AspNetUsers");
         }
     }
 }

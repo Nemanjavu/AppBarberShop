@@ -24,6 +24,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
         builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
+        builder.Entity<Booking>()
+            .Property(u => u.Service)
+            .HasConversion<string>()
+            .HasMaxLength(50);
+        builder.Entity<Booking>()
+              .HasOne(c => c.AppUser)
+              .WithMany(x => x.Bookings)
+              .HasForeignKey(f => f.UserId)
+              .HasConstraintName("UserId")
+              .OnDelete(DeleteBehavior.Cascade)
+              .IsRequired();
     }
 }
 

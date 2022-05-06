@@ -4,22 +4,29 @@ using AppBarberShop.Areas.Identity.Data;
 using AppBarberShop.Models;
 using AppBarberShop.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Globalization;
 
+
 namespace AppBarberShop.Controllers
 {
     public class BookingController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public BookingController(ApplicationDbContext context)
+       //private UserManager<ApplicationUser> _userManager;
+        private IHttpContextAccessor _httpContextAccessor;
+        public BookingController(ApplicationDbContext context, /*UserManager<ApplicationUser> userManager,*/ IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            //_userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
         }
-        public ActionResult Index()
+       
+        public IActionResult Index()
         {
             //List<Booking> bookings = _context.Bookings.ToList();
             //return View();
@@ -30,8 +37,10 @@ namespace AppBarberShop.Controllers
             }
             else
             {
-                string user_id = User.Identity.Name;
-                bookings = _context.Bookings.Where(b => b.UserId == user_id).Where(b => b.Date >= DateTime.Today).Include(b => b.Barber).OrderBy(b => b.Date).ThenBy(b => b.Start_DateTime).ToList();
+                //var currentUser = manager.FindByIdAsync(HttpContext.User.Identity.GetUserId);
+                // string user_id = HttpContext.User.Identity.Name;
+                var user_id = _httpContextAccessor.HttpContext?.User.GetUserId();
+                 bookings = _context.Bookings.Where(b => b.UserId == user_id).Where(b => b.Date >= DateTime.Today).Include(b => b.Barber).OrderBy(b => b.Date).ThenBy(b => b.Start_DateTime).ToList();
             }
 
             return View(bookings);
@@ -41,6 +50,7 @@ namespace AppBarberShop.Controllers
         //Used to Collect Criteria to Find Room
         public ActionResult Create()
         {
+            //var user_id = _httpContextAccessor.HttpContext?.User.GetUserId();
             PopulateStartTimeDropDownList();
             PopulateEndTimeDropDownList();
             return View();
@@ -75,7 +85,7 @@ namespace AppBarberShop.Controllers
                         Start_DateTime = vm.Start_DateTime,
                         End_DateTime = vm.End_DateTime,
                     };
-                    ViewBag.Username = User.Identity.Name;
+                    ViewBag.Username = _httpContextAccessor.HttpContext?.User.GetUserId(); 
                     ViewBag.AvailableBarbers = availableBarbers;
                     ViewBag.BarberId = new SelectList(availableBarbers, "BarberId", "BarberName");
                     return View(newBooking);
@@ -91,6 +101,8 @@ namespace AppBarberShop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreatePost([Bind("BarberId, Service, Date, Start_DateTime, End_DateTime, UserId")] Booking booking)
         {
+            var user_id = _httpContextAccessor.HttpContext?.User.GetUserId();
+            booking.UserId = user_id;
             try
             {
                 if (ModelState.IsValid)
