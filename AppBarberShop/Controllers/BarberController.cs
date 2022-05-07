@@ -22,11 +22,11 @@ namespace AppBarberShop.Controllers
       
 
 
-        // GET: MeetingRooms
+        // GET: Barbers
         public ActionResult Index(string sortOrder, string searchString)
         {
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            //ViewBag.SizeSortParm = sortOrder == "Size" ? "size_desc" : "Size";
+            
             var barbers = from r in _context.Barbers
                         select r;
 
@@ -45,13 +45,10 @@ namespace AppBarberShop.Controllers
             return View(barbers.ToList());
         }
 
-        // GET: MeetingRooms/Details/{keyword}
+        // GET: Barbers/Details/{keyword}
         public ActionResult Details(string keyword)
         {
-            //if (String.IsNullOrEmpty(keyword))
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
+        
             Barber barberRoom = _context.Barbers.Where(n => n.BarberName == keyword).FirstOrDefault();
             if (barberRoom == null)
             {

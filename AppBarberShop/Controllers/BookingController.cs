@@ -16,20 +16,16 @@ namespace AppBarberShop.Controllers
 {
     public class BookingController : Controller
     {
-        private readonly ApplicationDbContext _context;
-       //private UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;      
         private IHttpContextAccessor _httpContextAccessor;
-        public BookingController(ApplicationDbContext context, /*UserManager<ApplicationUser> userManager,*/ IHttpContextAccessor httpContextAccessor)
+        public BookingController(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
-            //_userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
         }
        
         public IActionResult Index()
         {
-            //List<Booking> bookings = _context.Bookings.ToList();
-            //return View();
             IEnumerable<Booking> bookings;
             if (User.IsInRole("Admin"))
             {
@@ -37,8 +33,6 @@ namespace AppBarberShop.Controllers
             }
             else
             {
-                //var currentUser = manager.FindByIdAsync(HttpContext.User.Identity.GetUserId);
-                // string user_id = HttpContext.User.Identity.Name;
                 var user_id = _httpContextAccessor.HttpContext?.User.GetUserId();
                  bookings = _context.Bookings.Where(b => b.UserId == user_id).Where(b => b.Date >= DateTime.Today).Include(b => b.Barber).OrderBy(b => b.Date).ThenBy(b => b.Start_DateTime).ToList();
             }
@@ -47,17 +41,16 @@ namespace AppBarberShop.Controllers
         }
 
         // GET: Booking/Create
-        //Used to Collect Criteria to Find Room
+        //Used to Collect Criteria to Find Barber
         public ActionResult Create()
         {
-            //var user_id = _httpContextAccessor.HttpContext?.User.GetUserId();
             PopulateStartTimeDropDownList();
             PopulateEndTimeDropDownList();
             return View();
         }
 
         // POST: Booking/CreateStep2
-        //Used to Pick Room
+        //Used to Pick Barber
         [HttpPost]
         public ActionResult Create2(BookingCreateViewModel vm)
         {
@@ -65,9 +58,15 @@ namespace AppBarberShop.Controllers
             {
                 return BadRequest();
             }
+            //Check that the tine is valid
             if (vm.InvalidStartAndEnd())
             {
                 ModelState.AddModelError("", "Please check start and end times. A meeting cannot end before it starts.");
+            }
+            //Check that the date is valid
+            if (vm.InValidDate())
+            {
+                ModelState.AddModelError("", "Invalid Date.");
             }
             if (ModelState.IsValid)
             {
@@ -107,7 +106,7 @@ namespace AppBarberShop.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    //make sure room is still free
+                    //make sure Barber is still free
                     foreach (Booking b in _context.Bookings)
                     {
                         if (!b.IsValidBooking(booking))
@@ -162,7 +161,7 @@ namespace AppBarberShop.Controllers
                     Start_DateTime = booking.Start_DateTime,
                     End_DateTime = booking.End_DateTime
                 };
-               // ViewBag.BarberId = new SelectList(availableBarbers, "BarberId", "BarberName");
+            
                 ViewBag.BarberId = new SelectList(_context.Barbers, "BarberId", "BarberName", booking.BarberId);
                 PopulateStartTimeDropDownList(booking.Start_DateTime);
                 PopulateEndTimeDropDownList(booking.End_DateTime);
@@ -192,6 +191,10 @@ namespace AppBarberShop.Controllers
             {
                 ModelState.AddModelError("", "Please check start and end times. A meeting cannot end before it starts.");
             }
+            //if (vm.InValidDate())
+            //{
+            //    ModelState.AddModelError("", "Invalid Date.");
+            //}
             else
             {
                 if (ModelState.IsValid)
@@ -207,7 +210,7 @@ namespace AppBarberShop.Controllers
                     bookingToUpdate.End_DateTime = vm.End_DateTime;
                     bookingToUpdate.BarberId = vm.BarberId;
 
-                    //make sure room is free                    
+                    //make sure Barber is free                    
                     foreach (Booking b in checkSet)
                     {
                         if (!b.IsValidBooking(bookingToUpdate))
@@ -293,7 +296,7 @@ namespace AppBarberShop.Controllers
             List<Barber> availableBarber = _context.Barbers.OrderBy(r => r.BarberName).ToList();
             //availableBarber = await _context.Barber.//OrderBy(r => r.BarberName).ToListAsync();
 
-            //find meetings on same day
+            //find Bookings on same day
             IEnumerable<Booking> filteredBookings = _context.Bookings.Where(b => b.Date.Year == date.Year && b.Date.Month == date.Month && b.Date.Day == date.Day).ToList();
 
             //for each meeting at same time, eliminate room

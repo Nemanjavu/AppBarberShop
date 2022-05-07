@@ -59,6 +59,18 @@ namespace AppBarberShop.ViewModels
             }
         }
 
+        public bool InValidDate()
+        {
+            if (Date < DateTime.Now)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
 
 
     }

@@ -1,4 +1,5 @@
-﻿@model AppBarberShop.ViewModels.BookingEditViewModel
+﻿@using AppBarberShop.Data.Enum
+@model AppBarberShop.ViewModels.BookingEditViewModel
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -18,6 +19,14 @@
         <hr />
         @Html.ValidationSummary(true, "", new {@class = "text-danger"})
         @Html.HiddenFor(model => model.BookingId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Service, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.Service, new SelectList(Enum.GetValues(typeof(Service))), htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Service, "", new { @class = "text-danger" })
+            </div>
+        </div>
     
    
         <div class="form-group">
@@ -44,8 +53,9 @@
             </div>
         </div>
 
+
         <div class="form-group">
-            @Html.LabelFor(model => model.BarberId, "BarberId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.BarberId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("BarberId", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.BarberId, "", new { @class = "text-danger" })
@@ -58,6 +68,7 @@
             </div>
         </div>
     </div>
+    
 }
 
 <div>
