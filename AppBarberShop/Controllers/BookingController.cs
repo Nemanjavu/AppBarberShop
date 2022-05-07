@@ -71,7 +71,7 @@ namespace AppBarberShop.Controllers
             }
             if (ModelState.IsValid)
             {
-                //find available rooms!
+                //find available Barber
                 List<Barber> availableBarbers = FindAvailableBarbers(vm.Date, vm.Start_DateTime, vm.End_DateTime);
                 if (availableBarbers.Count == 0)
                 {
@@ -134,6 +134,7 @@ namespace AppBarberShop.Controllers
         }
 
         // GET: Booking/Edit/5
+        [HttpGet]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -148,7 +149,7 @@ namespace AppBarberShop.Controllers
             //check if the booking is from the user logged in unless he is an admin
             try
             {
-                if (!User.IsInRole("Admin") && booking.UserId != User.Identity.Name)
+                if (!User.IsInRole("Admin") && booking.UserId != _httpContextAccessor.HttpContext?.User.GetUserId())
                 {
                     throw new UnauthorizedAccessException("Oops, this booking doesn't seem to be yours, you cannot edit it.");
                 }
@@ -161,24 +162,24 @@ namespace AppBarberShop.Controllers
                     Start_DateTime = booking.Start_DateTime,
                     End_DateTime = booking.End_DateTime
                 };
-
-                ViewBag.RoomId = new SelectList(_context.Barbers, "BarberId", "BarberName", booking.BarberId);
+               // ViewBag.BarberId = new SelectList(availableBarbers, "BarberId", "BarberName");
+                ViewBag.BarberId = new SelectList(_context.Barbers, "BarberId", "BarberName", booking.BarberId);
                 PopulateStartTimeDropDownList(booking.Start_DateTime);
                 PopulateEndTimeDropDownList(booking.End_DateTime);
                 return View(vm);
             }
             catch (UnauthorizedAccessException ex)
             {
-                return View("NotAuthorizedError", ex);//, new HandleErrorInfo(ex, "Booking", "Edit"));
+                return View("NotAuthorizedError", ex); // new HandleErrorInfo(ex, "Booking", "Edit");//, new HandleErrorInfo(ex, "Booking", "Edit"));
             }
         }
 
         // POST: Booking/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ActionName("Edit")]
+        [HttpPost]   
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(BookingEditViewModel vm)
+        public ActionResult Edit(BookingEditViewModel vm)
         {
             if (vm == null)
             {
@@ -232,7 +233,7 @@ namespace AppBarberShop.Controllers
             ViewBag.BarberId = new SelectList(_context.Barbers, "BarberId", "BarberName", bookingToUpdate.BarberId);
             PopulateStartTimeDropDownList(vm.Start_DateTime);
             PopulateEndTimeDropDownList(vm.End_DateTime);
-            return View("Edit", vm);
+            return View("Index", vm);
         }
 
         // GET: Booking/Delete/5
