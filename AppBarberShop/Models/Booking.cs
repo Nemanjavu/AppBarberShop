@@ -49,7 +49,7 @@ namespace AppBarberShop.Models
 
         //public virtual Customer Customer { get; set; }
 
-        
+
 
 
 

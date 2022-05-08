@@ -12,7 +12,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppBarberShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
+
     [Migration("20220506201533_InitialCreate")]
+
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -143,7 +145,10 @@ namespace AppBarberShop.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
+<<<<<<< HEAD:AppBarberShop/Migrations/20220506201533_InitialCreate.Designer.cs
                         .IsRequired()
+=======
+>>>>>>> ad571f256c0ae0b2a35a6f23b2a5fe11d3a6e473:AppBarberShop/Migrations/20220506125418_InitialCreate.Designer.cs
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("BookingId");
@@ -300,6 +305,7 @@ namespace AppBarberShop.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+<<<<<<< HEAD:AppBarberShop/Migrations/20220506201533_InitialCreate.Designer.cs
                     b.HasOne("AppBarberShop.Areas.Identity.Data.ApplicationUser", "User")
                         .WithMany("Bookings")
                         .HasForeignKey("UserId")
@@ -310,6 +316,15 @@ namespace AppBarberShop.Migrations
                     b.Navigation("Barber");
 
                     b.Navigation("User");
+
+                    b.HasOne("AppBarberShop.Areas.Identity.Data.ApplicationUser", "applicationuser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Barber");
+
+                    b.Navigation("applicationuser");
+
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

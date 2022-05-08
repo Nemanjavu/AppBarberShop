@@ -186,6 +186,11 @@ namespace AppBarberShop.Migrations
                 {
                     table.PrimaryKey("PK_Bookings", x => x.BookingId);
                     table.ForeignKey(
+                        name: "FK_Bookings_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Bookings_Barbers_BarberId",
                         column: x => x.BarberId,
                         principalTable: "Barbers",
