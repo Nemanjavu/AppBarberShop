@@ -107,11 +107,12 @@ namespace AppBarberShop.Controllers
                 if (ModelState.IsValid)
                 {
                     //make sure Barber is still free
+                    //Not sure if we need
                     foreach (Booking b in _context.Bookings)
                     {
                         if (!b.IsValidBooking(booking))
                         {
-                            ModelState.AddModelError("", "This room is not available any longer for booking. Please try to make another booking.");
+                            ModelState.AddModelError("", "This Barber is not available for booking. Please Cchoose another.");
                             PopulateStartTimeDropDownList(booking.Start_DateTime);
                             PopulateEndTimeDropDownList(booking.End_DateTime);
                             return View("Create", new { Date = booking.Date });
@@ -140,6 +141,7 @@ namespace AppBarberShop.Controllers
             {
                 return new BadRequestResult();
             }
+
             Booking booking = _context.Bookings.Find(id);
             if (booking == null)
             {
@@ -183,22 +185,26 @@ namespace AppBarberShop.Controllers
             if (vm == null)
             {
                 return new BadRequestResult();
-            }
+            }           
+
             Booking bookingToUpdate = _context.Bookings.Find(vm.BookingId.Value);
 
-            //check valid times
+            //Check that the tine is valid
             if (vm.InvalidStartAndEnd())
             {
                 ModelState.AddModelError("", "Please check start and end times. A meeting cannot end before it starts.");
             }
-            //if (vm.InValidDate())
-            //{
-            //    ModelState.AddModelError("", "Invalid Date.");
-            //}
+            //Check that the date is valid
+            if (vm.InValidDate())
+            {
+                ModelState.AddModelError("", "Invalid Date.");
+            }
             else
             {
+
                 if (ModelState.IsValid)
                 {
+
                     //create set of existing bookings
                     List<Booking> checkSet = _context.Bookings.ToList();
                     checkSet.Remove(bookingToUpdate);
@@ -213,14 +219,16 @@ namespace AppBarberShop.Controllers
                     //make sure Barber is free                    
                     foreach (Booking b in checkSet)
                     {
+                        
                         if (!b.IsValidBooking(bookingToUpdate))
                         {
-                            ModelState.AddModelError("", "The selected room is not available at the selected date and times. Please try to make another booking.");
+                            ModelState.AddModelError("", "This Barber is not available at the selected date and time. Please try to make another booking.");
                             ViewBag.BarberId = new SelectList(_context.Barbers, "BarberId", "BarberName", bookingToUpdate.BarberId);
                             PopulateStartTimeDropDownList(bookingToUpdate.Start_DateTime);
                             PopulateEndTimeDropDownList(bookingToUpdate.End_DateTime);
                             return View("Edit", vm);
                         }
+
                     }
                     try
                     {
@@ -233,10 +241,11 @@ namespace AppBarberShop.Controllers
                     }
                 }
             }
+
             ViewBag.BarberId = new SelectList(_context.Barbers, "BarberId", "BarberName", bookingToUpdate.BarberId);
             PopulateStartTimeDropDownList(vm.Start_DateTime);
             PopulateEndTimeDropDownList(vm.End_DateTime);
-            return View("Index", vm);
+            return View("Edit", vm);
         }
 
         // GET: Booking/Delete/5

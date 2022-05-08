@@ -48,10 +48,10 @@ namespace AppBarberShop.Models
         
 
         
-
+        //Should Change the name
         public bool IsValidBooking(Booking newBooking)
-        {
-            if (newBooking.BookingId == BarberId && newBooking.Date == Date)
+        {//Changed newBooking.BookingId to Barberid
+            if (newBooking.BarberId == BarberId && newBooking.Date == Date)
             {
                 if ((newBooking.Start_DateTime > End_DateTime) || (newBooking.End_DateTime < Start_DateTime))
                 {
