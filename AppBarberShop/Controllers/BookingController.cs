@@ -71,6 +71,18 @@ namespace AppBarberShop.Controllers
             {
                 ModelState.AddModelError("", "Please check start and end times. A meeting cannot end before it starts.");
             }
+
+            //Check that the date is valid
+            if (vm.InValidDate())
+            {
+                ModelState.AddModelError("", "Invalid Date.");
+            }//Ensure that the time is not prior to now
+            if (vm.InvalidStartTime())
+            {
+                ModelState.AddModelError("", "Please check start time. A booking cannot be made prior to name.");
+            }
+
+
             if (ModelState.IsValid)
             {
                 //find available rooms!
@@ -200,6 +212,16 @@ namespace AppBarberShop.Controllers
             if (vm.InvalidStartAndEnd())
             {
                 ModelState.AddModelError("", "Please check start and end times. A meeting cannot end before it starts.");
+            }
+            //Ensure that the time is not prior to now
+            if (vm.InvalidStartTime())
+            {
+                ModelState.AddModelError("", "Please check start time. A booking cannot be made prior to name.");
+            }
+
+            if (vm.InValidDate())
+            {
+                ModelState.AddModelError("", "Invalid Date");            
             }
             else
             {
