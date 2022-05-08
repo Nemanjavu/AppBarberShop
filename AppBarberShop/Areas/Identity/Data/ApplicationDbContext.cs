@@ -30,13 +30,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .Property(u => u.Service)
             .HasConversion<string>()
             .HasMaxLength(50);
-        //builder.Entity<Booking>()
-        //      .HasOne(c => c.User)
-        //      .WithMany(x => x.Bookings)
-        //      .HasForeignKey(f => f.UserId)
-        //      .HasConstraintName("Id")
-        //      .OnDelete(DeleteBehavior.Cascade)
-        //      .IsRequired();
     }
 }
 

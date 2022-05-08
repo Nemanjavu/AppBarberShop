@@ -298,7 +298,13 @@ namespace AppBarberShop.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("AppBarberShop.Areas.Identity.Data.ApplicationUser", "applicationuser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Barber");
+
+                    b.Navigation("applicationuser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

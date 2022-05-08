@@ -42,10 +42,9 @@ namespace AppBarberShop.Models
 
         //[Required]
         //[Display(Name = "Customer")]
-       // [ForeignKey("UserId")]
         public string UserId { get; set; }
-        //[ForeignKey("UserId")]
-        public virtual ApplicationUser User { get; set; }
+        [ForeignKey("UserId")]
+        public virtual ApplicationUser applicationuser { get; set; }
 
         //public virtual Customer Customer { get; set; }
 
