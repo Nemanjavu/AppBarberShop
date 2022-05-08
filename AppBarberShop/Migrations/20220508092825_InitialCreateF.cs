@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AppBarberShop.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialCreateF : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -180,7 +180,7 @@ namespace AppBarberShop.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Start_DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     End_DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -195,12 +195,6 @@ namespace AppBarberShop.Migrations
                         column: x => x.BarberId,
                         principalTable: "Barbers",
                         principalColumn: "BarberId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "Id",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -278,10 +272,10 @@ namespace AppBarberShop.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Barbers");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Barbers");
         }
     }
 }

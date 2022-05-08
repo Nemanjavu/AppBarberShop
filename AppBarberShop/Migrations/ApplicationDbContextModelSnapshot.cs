@@ -141,7 +141,6 @@ namespace AppBarberShop.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("BookingId");
@@ -299,7 +298,7 @@ namespace AppBarberShop.Migrations
                         .IsRequired();
 
                     b.HasOne("AppBarberShop.Areas.Identity.Data.ApplicationUser", "applicationuser")
-                        .WithMany()
+                        .WithMany("Bookings")
                         .HasForeignKey("UserId");
 
                     b.Navigation("Barber");
