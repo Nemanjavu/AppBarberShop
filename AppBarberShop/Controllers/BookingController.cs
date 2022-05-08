@@ -68,6 +68,11 @@ namespace AppBarberShop.Controllers
             {
                 ModelState.AddModelError("", "Invalid Date.");
             }
+            //Ensure that the time is not prior to now
+            if(vm.InvalidStartTime())
+            {
+                ModelState.AddModelError("", "Please check start time. A booking cannot be made prior to now.");
+            }
             if (ModelState.IsValid)
             {
                 //find available Barber
@@ -193,6 +198,11 @@ namespace AppBarberShop.Controllers
             if (vm.InvalidStartAndEnd())
             {
                 ModelState.AddModelError("", "Please check start and end times. A meeting cannot end before it starts.");
+            }
+            //Ensure that the time is not prior to now
+            if (vm.InvalidStartTime())
+            {
+                ModelState.AddModelError("", "Please check start time. A booking cannot be made prior to now.");
             }
             //Check that the date is valid
             if (vm.InValidDate())
