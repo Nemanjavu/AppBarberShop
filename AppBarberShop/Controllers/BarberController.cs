@@ -12,24 +12,19 @@ namespace AppBarberShop.Controllers
     public class BarberController : Controller
     {
         private readonly ApplicationDbContext _context;
-        //private BookingContext db = new BookingContext();
-        
-
         
         public BarberController(ApplicationDbContext context)
         {
             _context = context;
         }
-      
+     
 
-
-        // GET: MeetingRooms
+        // GET: Barbers
         public ActionResult Index(string sortOrder, string searchString)
         {
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            //ViewBag.SizeSortParm = sortOrder == "Size" ? "size_desc" : "Size";
-            var barbers = from r in _context.Barbers
-                        select r;
+            var barbers = from b in _context.Barbers
+                        select b;
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -46,22 +41,18 @@ namespace AppBarberShop.Controllers
             return View(barbers.ToList());
         }
 
-        // GET: MeetingRooms/Details/{keyword}
+        // GET: Barbers/Details/{keyword}
         public ActionResult Details(string keyword)
         {
-            //if (String.IsNullOrEmpty(keyword))
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
-            Barber barberRoom = _context.Barbers.Where(n => n.BarberName == keyword).FirstOrDefault();
-            if (barberRoom == null)
+            Barber barber = _context.Barbers.Where(n => n.BarberName == keyword).FirstOrDefault();
+            if (barber == null)
             {
                 return NotFound();
             }
-            return View(barberRoom);
+            return View(barber);
         }
 
-        // GET: MeetingRooms/Create
+        // GET: Barber/Create
         [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
@@ -69,7 +60,7 @@ namespace AppBarberShop.Controllers
             return View();
         }
 
-        // POST: MeetingRooms/Create
+        // POST: Barber/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize(Roles = "Admin")]
@@ -89,7 +80,7 @@ namespace AppBarberShop.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("", "A meeting room with the same name already exists.");
+                        ModelState.AddModelError("", "A Barber with the same name already exists.");
                     }
                 }
             }
@@ -100,7 +91,7 @@ namespace AppBarberShop.Controllers
             return View(barber);
         }
 
-        // GET: MeetingRooms/Edit/5
+        // GET: Barber/Edit/5
         [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
@@ -116,7 +107,7 @@ namespace AppBarberShop.Controllers
             return View(barber);
         }
 
-        // POST: MeetingRooms/Edit/5
+        // POST: Barber/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize(Roles = "Admin")]
@@ -133,16 +124,15 @@ namespace AppBarberShop.Controllers
             string oldName = barberToUpdate.BarberName;
             List<string> checkSet = _context.Barbers.Select(m => m.BarberName).ToList();
 
-            //if (TryUpdateModel(barberToUpdate, "", new string[] { "BarberName" }))
             if (ModelState.IsValid)
                 {
                 try
                 {
-                    //check that a room with same name does not already exists if name is being changed
+                    //check that a barber with same name does not already exists if name is being changed
                     string newName = barberToUpdate.BarberName;
                     if (newName != oldName && checkSet.Contains(newName))
                     {
-                        ModelState.AddModelError("", "A meeting room with the same name already exists.");
+                        ModelState.AddModelError("", "A barber with the same name already exists.");
                     }
                     else
                     {
@@ -158,7 +148,7 @@ namespace AppBarberShop.Controllers
             return View(barberToUpdate);
         }
 
-        // GET: MeetingRooms/Delete/5
+        // GET: barber/Delete/5
         [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id, bool? saveChangesError = false)
         {
@@ -178,7 +168,7 @@ namespace AppBarberShop.Controllers
             return View(barber);
         }
 
-        // POST: MeetingRooms/Delete/5
+        // POST: Barber/Delete/5
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -187,16 +177,16 @@ namespace AppBarberShop.Controllers
             try
             {
                 Barber barberToDelete = _context.Barbers.Find(id);
-                //check if any meeting is happening in the room at a future date
-                Booking bookingUsingRoomInFuture = _context.Bookings.FirstOrDefault(x => (x.BarberId == id) && (x.Date >= DateTime.Today));
-                if (bookingUsingRoomInFuture == null)
+
+                Booking bookingUsingBarberInFuture = _context.Bookings.FirstOrDefault(x => (x.BarberId == id) && (x.Date >= DateTime.Today));
+                if (bookingUsingBarberInFuture == null)
                 {
                     _context.Barbers.Remove(barberToDelete);
                     _context.SaveChanges();
                 }
                 else
                 {
-                    TempData["msg"] = "<script>alert('This meeting room cannot be deleted as it has been booked for future meetings.');</script>";
+                    TempData["msg"] = "<script>alert('This barber cannot be deleted as it has been booked for future bookings.');</script>";
                 }
 
             }

@@ -22,14 +22,10 @@ namespace AppBarberShop.Controllers
             _context = context;
             _httpContextAccessor=httpContextAccessor;
         }
-        //public async Task<ApplicationUser> GetUserById(string id)
-        //{
-        //    return await _context.Users.FindAsync(id);
-        //}
+        
         public ActionResult Index()
         {
-            //List<Booking> bookings = _context.Bookings.ToList();
-            //return View();
+            
             IEnumerable<Booking> bookings;
             if (User.IsInRole("Admin"))
             {
@@ -37,10 +33,6 @@ namespace AppBarberShop.Controllers
             }
             else
             {
-                //ApplicationUser applicationUser = new ApplicationUser();
-                //var user_id = _context.Users.FindAsync(User);   
-                //var user_Id = new ApplicationUser() { Id = _context.Bookings.Add(UserId)};
-                // var user_id = _context.Users.Where(u => u.Id == id).SingleOrDefault();
                 var user_id = _httpContextAccessor.HttpContext?.User.GetUserId();
 
                 bookings = _context.Bookings.Where(b => b.UserId == user_id).Where(b => b.Date >= DateTime.Today).Include(b => b.Barber).OrderBy(b => b.Date).ThenBy(b => b.Start_DateTime).ToList();
@@ -50,7 +42,7 @@ namespace AppBarberShop.Controllers
         }
 
         // GET: Booking/Create
-        //Used to Collect Criteria to Find Room
+        //Used to Collect Criteria to Find Barber
         public ActionResult Create()
         {
             PopulateStartTimeDropDownList();
@@ -58,8 +50,8 @@ namespace AppBarberShop.Controllers
             return View();
         }
 
-        // POST: Booking/CreateStep2
-        //Used to Pick Room
+        // POST: Booking/Create2
+        //Used to Pick Barber
         [HttpPost]
         public ActionResult Create2(BookingCreateViewModel vm)
         {
@@ -69,7 +61,7 @@ namespace AppBarberShop.Controllers
             }
             if (vm.InvalidStartAndEnd())
             {
-                ModelState.AddModelError("", "Please check start and end times. A meeting cannot end before it starts.");
+                ModelState.AddModelError("", "Please check start and end times. A booking cannot end before it starts.");
             }
 
             //Check that the date is valid
@@ -85,11 +77,11 @@ namespace AppBarberShop.Controllers
 
             if (ModelState.IsValid)
             {
-                //find available rooms!
+                //find available barbers!
                 List<Barber> availableBarbers = FindAvailableBarbers(vm.Date, vm.Start_DateTime, vm.End_DateTime);
                 if (availableBarbers.Count == 0)
                 {
-                    ModelState.AddModelError("", "Sorry, there is no available room at the specified date and time.");
+                    ModelState.AddModelError("", "Sorry, there is no available barber at the specified date and time.");
                 }
                 else
 
@@ -127,12 +119,12 @@ namespace AppBarberShop.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    //make sure room is still free
+                    //make sure barber is still free
                     foreach (Booking b in _context.Bookings)
                     {
                         if (!b.IsValidBooking(booking))
                         {
-                            ModelState.AddModelError("", "This room is not available any longer for booking. Please try to make another booking.");
+                            ModelState.AddModelError("", "This barber is not available any longer for booking. Please try to make another booking.");
                             PopulateStartTimeDropDownList(booking.Start_DateTime);
                             PopulateEndTimeDropDownList(booking.End_DateTime);
                             return View("Create", new { Date = booking.Date });
@@ -169,7 +161,6 @@ namespace AppBarberShop.Controllers
             //check if the booking is from the user logged in unless he is an admin
             try
             {
-                //if (!User.IsInRole("Admin") && booking.UserId != User.Identity.Name)
                 if (booking.UserId == User.Identity.Name)
                 {
                     throw new UnauthorizedAccessException("Oops, this booking doesn't seem to be yours, you cannot edit it.");
@@ -238,12 +229,12 @@ namespace AppBarberShop.Controllers
                     bookingToUpdate.End_DateTime = vm.End_DateTime;
                     bookingToUpdate.BarberId = vm.BarberId;
 
-                    //make sure room is free                    
+                    //make sure barber is free                    
                     foreach (Booking b in checkSet)
                     {
                         if (!b.IsValidBooking(bookingToUpdate))
                         {
-                            ModelState.AddModelError("", "The selected room is not available at the selected date and times. Please try to make another booking.");
+                            ModelState.AddModelError("", "The selected barber is not available at the selected date and times. Please try to make another booking.");
                             ViewBag.BarberId = new SelectList(_context.Barbers, "BarberId", "BarberName", bookingToUpdate.BarberId);
                             PopulateStartTimeDropDownList(bookingToUpdate.Start_DateTime);
                             PopulateEndTimeDropDownList(bookingToUpdate.End_DateTime);
@@ -295,7 +286,6 @@ namespace AppBarberShop.Controllers
             //check if the booking is from the user logged in ***unless he is an admin***
             try
             {
-                //if (!User.IsInRole("Admin") && booking.UserId != User.Identity.Name)
                 if (booking.UserId == User.Identity.Name)
                 {
                     throw new UnauthorizedAccessException("Oops, this booking doesn't seem to be yours, you cannot delete it.");
@@ -319,16 +309,15 @@ namespace AppBarberShop.Controllers
             base.Dispose(disposing);
         }
 
-        //Find Available Rooms when date and time are picked
+        //Find Available Barbers when date and time are picked
         private List<Barber> FindAvailableBarbers(DateTime date, DateTime startTime, DateTime endTime)
         {
             List<Barber> availableBarber = _context.Barbers.OrderBy(r => r.BarberName).ToList();
-            //availableBarber = await _context.Barber.//OrderBy(r => r.BarberName).ToListAsync();
 
-            //find meetings on same day
+            //find booking on same day
             IEnumerable<Booking> filteredBookings = _context.Bookings.Where(b => b.Date.Year == date.Year && b.Date.Month == date.Month && b.Date.Day == date.Day).ToList();
 
-            //for each meeting at same time, eliminate room
+            //for each booking at same time, eliminate barber
             foreach (Booking item in filteredBookings)
             {
                 if (!((item.Start_DateTime > endTime) || (item.End_DateTime < startTime)))

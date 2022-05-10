@@ -46,9 +46,7 @@
         <td >
             @Html.DisplayFor(modelItem => item.Service)
         </td>
-       @* <td class="@trClass">
-            @Html.DisplayFor(modelItem => item.UserId)
-        </td>*@
+      
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.BookingId }) |
             @Html.ActionLink("Cancel", "Delete", new { id=item.BookingId })
@@ -59,5 +57,5 @@
 }
 else
 {
-    <h3>You do not have any booking for future meetings.</h3>
+    <h3>You do not have any booking for future.</h3>
 }
