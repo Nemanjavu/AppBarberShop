@@ -1,6 +1,4 @@
-﻿using AppBarberShop.Areas.Identity.Data;
-using AppBarberShop.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using AppBarberShop.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

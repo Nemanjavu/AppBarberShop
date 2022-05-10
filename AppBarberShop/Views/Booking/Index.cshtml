@@ -25,8 +25,8 @@
         <th>
             @Html.DisplayNameFor(model => model.Barber.BarberName)
         </th>
-        <th class="@trClass">
-            @Html.DisplayNameFor(model => model.UserId)
+        <th>
+            @Html.DisplayNameFor(model => model.Service)
         </th>
         <th></th>
     </tr>
@@ -43,8 +43,8 @@
         <td>
             @Html.ActionLink(@item.Barber.BarberName, "Details", "Barbers", new { keyword = item.Barber.BarberName  }, null)
         </td>
-        <td class="@trClass">
-            @Html.DisplayFor(modelItem => item.UserId)
+        <td>
+            @Html.DisplayFor(modelItem => item.Service)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.BookingId }) |

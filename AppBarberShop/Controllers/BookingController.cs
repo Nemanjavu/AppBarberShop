@@ -286,7 +286,7 @@ namespace AppBarberShop.Controllers
             //check if the booking is from the user logged in ***unless he is an admin***
             try
             {
-                if (!User.IsInRole("Admin") && booking.UserId != User.Identity.Name)
+                if (!User.IsInRole("Admin") && booking.UserId != _httpContextAccessor.HttpContext?.User.GetUserId())
                 {
                     throw new UnauthorizedAccessException("Oops, this booking doesn't seem to be yours, you cannot delete it.");
                 }
