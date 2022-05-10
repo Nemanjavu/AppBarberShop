@@ -49,12 +49,12 @@ namespace AppBarberShop.Controllers
         public ActionResult Details(string keyword)
         {
         
-            Barber barberRoom = _context.Barbers.Where(n => n.BarberName == keyword).FirstOrDefault();
-            if (barberRoom == null)
+            Barber barbers = _context.Barbers.Where(n => n.BarberName == keyword).FirstOrDefault();
+            if (barbers == null)
             {
                 return NotFound();
             }
-            return View(barberRoom);
+            return View(barbers);
         }
 
         // GET: MeetingRooms/Create
