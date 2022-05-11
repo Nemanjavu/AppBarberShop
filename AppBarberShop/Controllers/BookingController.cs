@@ -55,7 +55,7 @@ namespace AppBarberShop.Controllers
             //Check that the tine is valid
             if (vm.InvalidStartAndEnd())
             {
-                ModelState.AddModelError("", "Please check start and end times. A meeting cannot end before it starts.");
+                ModelState.AddModelError("", "Please check start and end times. A booking cannot end before it starts.");
             }
             //Check that the date is valid
             if (vm.InValidDate())
