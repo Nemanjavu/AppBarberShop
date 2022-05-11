@@ -73,7 +73,7 @@ namespace AppBarberShop.Controllers
                 List<Barber> availableBarbers = FindAvailableBarbers(vm.Date, vm.Start_DateTime, vm.End_DateTime);
                 if (availableBarbers.Count == 0)
                 {
-                    ModelState.AddModelError("", "Sorry, there is no available room at the specified date and time.");
+                    ModelState.AddModelError("", "Sorry, there is no available barber at the specified date and time.");
                 }
                 else
                 {
@@ -146,7 +146,7 @@ namespace AppBarberShop.Controllers
             {
                 return NotFound();
             }
-            //check if the booking is from the user logged in unless he is an admin
+            
             try
             {
                 
@@ -277,7 +277,7 @@ namespace AppBarberShop.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Booking booking = _context.Bookings.Find(id);
-            //check if the booking is from the user logged in ***unless he is an admin***
+            
             try
             {
                 
@@ -300,16 +300,16 @@ namespace AppBarberShop.Controllers
             base.Dispose(disposing);
         }
 
-        //Find Available Rooms when date and time are picked
+        //Find Available Barbers when date and time are picked
         private List<Barber> FindAvailableBarbers(DateTime date, DateTime startTime, DateTime endTime)
         {
             List<Barber> availableBarber = _context.Barbers.OrderBy(r => r.BarberName).ToList();
-            //availableBarber = await _context.Barber.//OrderBy(r => r.BarberName).ToListAsync();
+            
 
             //find Bookings on same day
             IEnumerable<Booking> filteredBookings = _context.Bookings.Where(b => b.Date.Year == date.Year && b.Date.Month == date.Month && b.Date.Day == date.Day).ToList();
 
-            //for each meeting at same time, eliminate room
+            //for each booking at same time, eliminate barber
             foreach (Booking item in filteredBookings)
             {
                 if (!((item.Start_DateTime > endTime) || (item.End_DateTime < startTime)))

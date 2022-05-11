@@ -24,23 +24,21 @@ namespace AppBarberShop.Models
         public virtual Barber Barber { get; set; }
         
 
-        [Required(ErrorMessage = "Indicate meeting date.")]
+        [Required(ErrorMessage = "Indicate booking date.")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
 
-        [Required(ErrorMessage = "Indicate when meeting starts.")]
+        [Required(ErrorMessage = "Indicate when booking starts.")]
         [DataType(DataType.Time)]
         [Display(Name = "Start Time")]
         public DateTime Start_DateTime { get; set; }
 
-        [Required(ErrorMessage = "Indicate when meeting ends.")]
+        [Required(ErrorMessage = "Indicate when booking ends.")]
         [DataType(DataType.Time)]
         [Display(Name = "End Time")]
         public DateTime End_DateTime { get; set; }
 
-        //[ForeignKey("CustomerId")]
-       // [Display(Name = "Customer")]
         public string UserId { get; set; }
         
         public virtual ApplicationUser AppUser { get; set; }

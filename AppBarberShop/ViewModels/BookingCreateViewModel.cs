@@ -11,13 +11,13 @@ namespace AppBarberShop.ViewModels
         [HiddenInput]
         public int? BookingId { get; set; }
 
-        [Required(ErrorMessage = "Indicate meeting date.")]
+        [Required(ErrorMessage = "Indicate booking date.")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
       
         public DateTime Date { get; set; }
 
-        [Required(ErrorMessage = "Indicate when meeting starts.")]
+        [Required(ErrorMessage = "Indicate when booking starts.")]
         [DataType(DataType.Time)]
         [Display(Name = "Start Time")]
         public DateTime Start_DateTime
@@ -32,7 +32,7 @@ namespace AppBarberShop.ViewModels
             }
         }
         //Took out Year
-        [Required(ErrorMessage = "Indicate when meeting ends.")]
+        [Required(ErrorMessage = "Indicate when booking ends.")]
         [DataType(DataType.Time)]
         [Display(Name = "End Time")]
         public DateTime End_DateTime
