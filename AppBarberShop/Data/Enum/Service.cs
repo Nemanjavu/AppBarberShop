@@ -2,8 +2,10 @@
 {
     public enum Service
     {
-        Haircut,
-        Shaving
+        DryCut,
+        Shaving, 
+        WashCut,
+        CutAndAShave
 
     }
 }

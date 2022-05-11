@@ -1,8 +1,35 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewBag.Title = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="jumbotron"> 
+    <div class="container">
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <h3 style="color: #772953">Book your Barbers!</h3>
 </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <h2 style="color: #772953"> Welcome to The Barber Shop</h2>
+            <p>
+                Barber Shop allows you to easily book a Babrer by checking their availability and make bookings.
+            </p>
+            <p><a class="btn btn-home" href="@Url.Action("About", "Home")">Learn More &raquo;</a></p>
+        </div>
+        <div class="col-md-3">
+            <h2 style="color: #772953">Register</h2>
+            <p>Click here to Register.</p>
+            <p><a class="btn btn-home" asp-area="Identity" asp-page="/Account/Register">Register Account &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2 style="color: #772953">Check Barbers</h2>
+            <p>Check Details of a Barbers</p>
+            <p><a class="btn btn-home" href="@Url.Action("Index", "Barber")">Check Barbers Details &raquo;</a></p>
+        </div>
+    </div>
+</div>    

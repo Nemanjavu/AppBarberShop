@@ -56,7 +56,9 @@ namespace AppBarberShop.Migrations
                 {
                     BarberId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BarberName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    BarberName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    BarberDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BarberImage = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

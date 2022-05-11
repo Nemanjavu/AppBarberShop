@@ -31,7 +31,7 @@ namespace AppBarberShop.ViewModels
                 start_DateTime = new DateTime(Date.Year, Date.Month, Date.Day, value.Hour, 0, 1);
             }
         }
-
+        //Took out Year
         [Required(ErrorMessage = "Indicate when meeting ends.")]
         [DataType(DataType.Time)]
         [Display(Name = "End Time")]

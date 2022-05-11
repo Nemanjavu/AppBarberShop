@@ -1,12 +1,11 @@
-﻿using BarberShopClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Net.Http.Formatting;
 
-namespace CA2Client
+namespace BarberShopClient
 {
     class Program
     {
@@ -21,7 +20,7 @@ namespace CA2Client
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("");
+                    client.BaseAddress = new Uri("http://localhost:5151/Booking/");
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     //test get free meetings rooms on 15/05/2022 from 09:00 to 10:00

@@ -41,7 +41,7 @@
             @item.Start_DateTime.ToShortTimeString()&ensp;–&ensp;@item.End_DateTime.ToShortTimeString()
         </td>
         <td>
-            @Html.ActionLink(@item.Barber.BarberName, "Details", "Barbers", new { keyword = item.Barber.BarberName  }, null)
+            @Html.ActionLink(@item.Barber.BarberName, "Detail", "Barber", new { id = item.Barber.BarberId  }, null)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Service)

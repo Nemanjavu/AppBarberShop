@@ -103,6 +103,13 @@ namespace AppBarberShop.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BarberId"), 1L, 1);
 
+                    b.Property<string>("BarberDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BarberImage")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BarberName")
                         .IsRequired()
                         .HasMaxLength(50)

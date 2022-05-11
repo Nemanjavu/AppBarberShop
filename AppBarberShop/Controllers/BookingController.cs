@@ -27,16 +27,10 @@ namespace AppBarberShop.Controllers
         public IActionResult Index()
         {
             IEnumerable<Booking> bookings;
-            if (User.IsInRole("Admin"))
-            {
-                bookings = _context.Bookings.Where(b => b.Date >= DateTime.Today).Include(b => b.Barber).OrderBy(b => b.Date).ThenBy(b => b.Start_DateTime).ToList();
-            }
-            else
-            {
-                var user_id = _httpContextAccessor.HttpContext?.User.GetUserId();
-                 bookings = _context.Bookings.Where(b => b.UserId == user_id).Where(b => b.Date >= DateTime.Today).Include(b => b.Barber).OrderBy(b => b.Date).ThenBy(b => b.Start_DateTime).ToList();
-            }
 
+            var user_id = _httpContextAccessor.HttpContext?.User.GetUserId();
+            bookings = _context.Bookings.Where(b => b.UserId == user_id).Where(b => b.Date >= DateTime.Today).Include(b => b.Barber).OrderBy(b => b.Date).ThenBy(b => b.Start_DateTime).ToList();
+            
             return View(bookings);
         }
 
@@ -155,11 +149,8 @@ namespace AppBarberShop.Controllers
             //check if the booking is from the user logged in unless he is an admin
             try
             {
-                if (!User.IsInRole("Admin") && booking.UserId != _httpContextAccessor.HttpContext?.User.GetUserId())
-                {
-                    throw new UnauthorizedAccessException("Oops, this booking doesn't seem to be yours, you cannot edit it.");
-                }
-                //using a viewmodel to pass on data from controller to view then to controller again when posting
+                
+            //using a viewmodel to pass on data from controller to view then to controller again when posting
                 BookingEditViewModel vm = new BookingEditViewModel
                 {
                     BookingId = booking.BookingId,
@@ -172,7 +163,8 @@ namespace AppBarberShop.Controllers
                 ViewBag.BarberId = new SelectList(_context.Barbers, "BarberId", "BarberName", booking.BarberId);
                 PopulateStartTimeDropDownList(booking.Start_DateTime);
                 PopulateEndTimeDropDownList(booking.End_DateTime);
-                return View(vm);
+
+            return View(vm);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -268,12 +260,14 @@ namespace AppBarberShop.Controllers
             if (saveChangesError.GetValueOrDefault())
             {
                 ViewBag.ErrorMessage = "Delete failed. Please try again. If problem persists, contact your system administrator.";
-    }
+            }
+
             Booking booking = _context.Bookings.Find(id);
+
             if (booking == null)
             {
-                return NotFound();
-}
+                return BadRequest();
+            }
             return View(booking);
         }
 
@@ -286,10 +280,7 @@ namespace AppBarberShop.Controllers
             //check if the booking is from the user logged in ***unless he is an admin***
             try
             {
-                if (!User.IsInRole("Admin") && booking.UserId != _httpContextAccessor.HttpContext?.User.GetUserId())
-                {
-                    throw new UnauthorizedAccessException("Oops, this booking doesn't seem to be yours, you cannot delete it.");
-                }
+                
                 _context.Bookings.Remove(booking);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
@@ -391,7 +382,6 @@ namespace AppBarberShop.Controllers
             }
             ViewBag.End_DateTime = endTimes;
         }
-
     }
 }
 

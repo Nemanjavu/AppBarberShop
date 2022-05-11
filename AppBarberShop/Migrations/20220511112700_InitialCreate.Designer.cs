@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppBarberShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220506211253_InitialCreate")]
+    [Migration("20220511112700_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -104,6 +104,13 @@ namespace AppBarberShop.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BarberId"), 1L, 1);
+
+                    b.Property<string>("BarberDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BarberImage")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BarberName")
                         .IsRequired()
