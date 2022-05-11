@@ -16,3 +16,17 @@ html {
 body {
   margin-bottom: 60px;
 }
+.jumbotron {
+    background-image: url(http://2.bp.blogspot.com/-lPUn_QJm1kI/VIRKN0gxgVI/AAAAAAAAHLM/dOx4RWf3RHI/s1600/Logo%2BBarbershop.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 50px;
+    font-weight: bold;
+    margin-top: 75px;
+    margin-bottom: 100px;
+    padding: 100px;
+    border-radius: 100px;
+    box-shadow: 10px 10px 5px 0px;
+    min-height: 325px;
+}

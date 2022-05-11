@@ -1,5 +1,6 @@
-﻿
+﻿//@Html.EditorFor(model => model.Service, new { htmlAttributes = new { @class = "form-control", @autofocus = "autofocus" } })
 
+using AppBarberShop.Areas.Identity.Data;
 using AppBarberShop.Data.Enum;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -39,18 +40,18 @@ namespace AppBarberShop.Models
         public DateTime End_DateTime { get; set; }
 
         //[ForeignKey("CustomerId")]
-        [Display(Name = "Customer")]
+       // [Display(Name = "Customer")]
         public string UserId { get; set; }
         
-        //public virtual Customer Customer { get; set; }
+        public virtual ApplicationUser AppUser { get; set; }
         
         
 
         
-
+        //Should Change the name
         public bool IsValidBooking(Booking newBooking)
-        {
-            if (newBooking.BookingId == BarberId && newBooking.Date == Date)
+        {//Changed newBooking.BookingId to Barberid
+            if (newBooking.BarberId == BarberId && newBooking.Date == Date)
             {
                 if ((newBooking.Start_DateTime > End_DateTime) || (newBooking.End_DateTime < Start_DateTime))
                 {

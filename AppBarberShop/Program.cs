@@ -20,6 +20,11 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+if(args.Length == 1 && args[0].ToLower() == "seeddata")
+{
+    Seed.SeedData(app);
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

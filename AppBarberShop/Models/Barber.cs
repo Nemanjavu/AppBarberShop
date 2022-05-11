@@ -14,8 +14,9 @@ namespace AppBarberShop.Models
         [Display(Name = "Barber Name")]
         [StringLength(50, ErrorMessage = "Name cannot be longer than 50 characters.")]
         public string  BarberName{ get; set; }
-
-
+        [Required(ErrorMessage = "Description cannot be left blank.")]
+        public string BarberDescription { get; set; }   
+        public string BarberImage { get; set; }
         public virtual ICollection<Booking> Bookings { get; set; }
     }
 }

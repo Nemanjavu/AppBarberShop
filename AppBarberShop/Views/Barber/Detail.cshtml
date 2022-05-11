@@ -1,0 +1,22 @@
+﻿@model Barber
+<!-- Page Content -->
+<div class="container">
+
+    <!-- Portfolio Item Heading -->
+    <h1 class="my-4">Barber:
+      <small>@Model.BarberName</small>
+    </h1>
+ 
+    <!-- Portfolio Item Row -->
+    <div class="row">
+  
+      <div class="col-md-8">
+        <img class="img-fluid" src=@Model.BarberImage alt="">
+      </div>
+  
+      <div class="col-md-4">
+        <h3 class="my-3">Barber Description</h3>
+        <p>@Model.BarberDescription</p>
+      </div> 
+    </div>              
+</div>

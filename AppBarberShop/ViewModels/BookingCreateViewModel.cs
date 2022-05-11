@@ -31,7 +31,7 @@ namespace AppBarberShop.ViewModels
                 start_DateTime = new DateTime(Date.Year, Date.Month, Date.Day, value.Hour, 0, 1);
             }
         }
-
+        //Took out Year
         [Required(ErrorMessage = "Indicate when meeting ends.")]
         [DataType(DataType.Time)]
         [Display(Name = "End Time")]
@@ -50,6 +50,29 @@ namespace AppBarberShop.ViewModels
         public bool InvalidStartAndEnd()
         {
             if (Start_DateTime >= End_DateTime)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool InvalidStartTime()
+        {
+            if (Start_DateTime <= DateTime.Now)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool InValidDate()
+        {
+            if (Date < DateTime.Today)
             {
                 return true;
             }
