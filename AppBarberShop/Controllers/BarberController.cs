@@ -7,21 +7,15 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace AppBarberShop.Controllers
 {
-    [Authorize]
     public class BarberController : Controller
     {
         private readonly ApplicationDbContext _context;
-        //private BookingContext db = new BookingContext();
-        
-
-        
+               
         public BarberController(ApplicationDbContext context)
         {
             _context = context;
         }
       
-
-
         // GET: Barbers
         public ActionResult Index(string sortOrder, string searchString)
         {
@@ -45,8 +39,8 @@ namespace AppBarberShop.Controllers
             return View(barbers.ToList());
         }
 
-        // GET: Barbers/Details/{keyword}
-        public IActionResult Detail(int id)
+        // GET: Barbers/Details
+        public IActionResult Detail(int? id)
         {
         
             Barber barbers = _context.Barbers.FirstOrDefault(b => b.BarberId == id);
