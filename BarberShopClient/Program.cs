@@ -20,7 +20,7 @@ namespace BarberShopClient
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://appbarbershop20220511222004.azurewebsites.net/Booking");
+                    client.BaseAddress = new Uri("https://appbarbershop20220511222004.azurewebsites.net/Booking/");
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     //test get free meetings rooms on 15/05/2022 from 09:00 to 10:00
