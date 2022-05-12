@@ -26,7 +26,7 @@ namespace BarberShopClient
                     //test get free meetings rooms on 15/05/2022 from 09:00 to 10:00
                     Console.WriteLine("List of free Barbers on 15/05/2022 from 9am to 10am");
 
-                    HttpResponseMessage response = await client.GetAsync("GetAvailableRooms?_date=20220515000000&_startTime=20220609090001&_endTime=20220609100000");
+                    HttpResponseMessage response = await client.GetAsync("GetAvailableBarbers?_date=20220515000000&_startTime=20220609090001&_endTime=20220609100000");
                     if (response.IsSuccessStatusCode)
                     {
                         var barbers = await response.Content.ReadAsAsync<IEnumerable<Barber>>();
